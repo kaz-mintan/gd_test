@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string.h>
 
-#define N 2
+#define N 3
 
 
 int minElement(double* array, size_t size){
@@ -20,24 +20,16 @@ int minElement(double* array, size_t size){
 
 double fE(double input[N]){
   double output=0;
-  output = 6*input[0] * input[0] - input[0] * input[1] + input[1] * input[1] + input[0] + 2*input[1];
+  output = (input[0] - 20) * (input[0] -20)+ (input[1] -5)*( input[1] -5) + (input[2]-2.6)*(input[2]-2.6);
   return output;
 }
 
 
-void function(double input[N], double* output){
-  for(int i =0;i<N;i++){
-    output[i] = input[i]*input[i]+4.0*input[i]+2.0;
-  }
-}
-
-int main(void){
-  double M_org[N] = {0,1};
-  double output[N];
-  double M[N];
-  memcpy(M,M_org,sizeof(M_org));
+//void grad_descent(double init[N], double *answer){
+void grad_descent(double M_org[N], double* M){
   double dEdM[N]={0};
   double err=100;
+  double Msize[N];
 
   while(err>0.00000001){
     double E_pre  = fE(M_org);
@@ -51,18 +43,28 @@ int main(void){
         delta[dm+1] = (E_cand[dm+1] - E_pre);
       }
       int index = minElement(delta,3);
-      dEdM[i] = delta[index];
-      //std::cout<<"minindex and delta"<<index<<","<<delta[index]<<"\n";
+      dEdM[i] = -delta[index];
+      M[i]=tmp_M;
+      std::cout<<"minindex and delta"<<index<<","<<delta[index]<<"\n";
     }
     err=0;
     for(int j=0;j<N;j++){
       M[j] = M_org[j]+dEdM[j];
       err+=(dEdM[j])*(dEdM[j])/2.0;
-      //std::cout<<"M,"<<M[j]<<",";
+      std::cout<<"M,"<<M[j]<<",";
     }
-    std::cout<<err<<std::endl;
-    memcpy(M_org,M,sizeof(M));
+    std::cout<<"err:"<<err<<std::endl;
+    memcpy(M_org,M,sizeof(Msize));
   }
+}
+
+int main(void){
+  double M_org[N] = {-10,1,7};
+  double M[N];
+  memcpy(M,M_org,sizeof(M_org));
+
+  grad_descent(M_org, M);
+  
   for(int j=0;j<N;j++){
     std::cout<<"M,"<<M[j]<<",";
   }
