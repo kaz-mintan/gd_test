@@ -59,7 +59,7 @@ void grad_descent(double M_org[N], double* M){
 }
 
 int main(void){
-  double M_org[N] = {-10,1,7};
+  double M_org[N] = {20,5,3};
   double M[N];
   memcpy(M,M_org,sizeof(M_org));
 
